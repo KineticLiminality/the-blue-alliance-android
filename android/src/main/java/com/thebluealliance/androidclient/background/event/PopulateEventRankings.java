@@ -23,7 +23,13 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * File created by phil on 4/23/14.
+ * Populates an array list of ListItems with the team rankings from an FRC event.
+ *
+ * @author Phil Lopreiato
+ * @author Bryce Matsuda
+ * @author Nathan Walters
+ *
+ * @version 5/21/2014
  */
 public class PopulateEventRankings extends AsyncTask<String, Void, APIResponse.CODE> {
 
@@ -44,6 +50,7 @@ public class PopulateEventRankings extends AsyncTask<String, Void, APIResponse.C
         teams = new ArrayList<>();
 
         try {
+            // Download the event rankings from TBA
             APIResponse<ArrayList<JsonArray>> response = DataManager.getEventRankings(activity, eventKey);
             ArrayList<JsonArray> rankList = response.getData();
             if(rankList.size() > 0) {
@@ -95,7 +102,7 @@ public class PopulateEventRankings extends AsyncTask<String, Void, APIResponse.C
                     //TODO get team name for given number
                 }
                 return response.getCode();
-            }else{
+            }else{ // Display an error if we cannot get the data.
                 //TODO indicate that no rankings exist (same for other fragments)
                 return APIResponse.CODE.NODATA;
             }
@@ -109,6 +116,7 @@ public class PopulateEventRankings extends AsyncTask<String, Void, APIResponse.C
     protected void onPostExecute(APIResponse.CODE code) {
         View view = mFragment.getView();
         if (view != null && activity != null) {
+            // Check view and activity isn't null before we set adapter
             ListView rankings = (ListView) view.findViewById(R.id.list);
             ListViewAdapter adapter = new ListViewAdapter(activity, teams);
             rankings.setAdapter(adapter);

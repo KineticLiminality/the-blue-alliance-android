@@ -22,14 +22,21 @@ import java.util.Collections;
 import java.util.HashMap;
 
 /**
- * File created by phil on 4/22/14.
+ *
+ *  Populates a ListView adapter with match results from an FRC event.
+ *
+ *  @author Phil Lopreiato
+ *  @author Bryce Matsuda
+ *  @author Nathan Walters
+ *
+ *  @version 5/21/2014
  */
 public class PopulateEventResults extends AsyncTask<String, Void, APIResponse.CODE> {
 
     private Fragment mFragment;
     private RefreshableHostActivity activity;
     private String eventKey, teamKey;
-    SparseArray<MatchGroup> groups;
+    SparseArray<MatchGroup> groups; // holds all the matches in an event.
 
     public PopulateEventResults(Fragment f) {
         mFragment = f;
@@ -44,7 +51,7 @@ public class PopulateEventResults extends AsyncTask<String, Void, APIResponse.CO
         } else {
             teamKey = "";
         }
-
+        // Initialize the groups of matches & the match sorter.
         groups = new SparseArray<>();
         MatchGroup qualMatches = new MatchGroup("Qualification Matches");
         MatchGroup quarterMatches = new MatchGroup("Quarterfinal Matches");
@@ -53,8 +60,10 @@ public class PopulateEventResults extends AsyncTask<String, Void, APIResponse.CO
         MatchSortByPlayOrderComparator comparator = new MatchSortByPlayOrderComparator();
         APIResponse<HashMap<Match.TYPE, ArrayList<Match>>> response;
         try {
+            // Get the results data from TBA.
             response = DataManager.getEventResults(activity, eventKey);
             HashMap<Match.TYPE, ArrayList<Match>> results = response.getData();
+            // Sort out the results and add matches to their respective groups.
             Collections.sort(results.get(Match.TYPE.QUAL), comparator);
             for (Match m : results.get(Match.TYPE.QUAL)) {
                 qualMatches.children.add(m);
@@ -76,10 +85,12 @@ public class PopulateEventResults extends AsyncTask<String, Void, APIResponse.CO
                 finalMatches.childrenKeys.add(m.getKey());
             }
         } catch (DataManager.NoDataException e) {
+            // Return null/an error if we cannot load the data
             Log.w(Constants.LOG_TAG, "unable to load event results");
             response = new APIResponse<>(null, APIResponse.CODE.NODATA);
         }
 
+        // Add the match groups to the giant SparseArray, if they have matches in them.
         int numGroups = 0;
         if (qualMatches.children.size() > 0) {
             groups.append(numGroups, qualMatches);
@@ -103,6 +114,7 @@ public class PopulateEventResults extends AsyncTask<String, Void, APIResponse.CO
     protected void onPostExecute(APIResponse.CODE code) {
         View view = mFragment.getView();
         if (view != null && activity != null) {
+        // Check view/activity isn't null before we initialize the ListView adapter
             MatchListAdapter adapter = new MatchListAdapter(activity, groups);
             ExpandableListView listView = (ExpandableListView) view.findViewById(R.id.match_results);
             listView.setAdapter(adapter);

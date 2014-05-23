@@ -22,7 +22,13 @@ import java.util.ArrayList;
 import java.util.Map;
 
 /**
- * File created by phil on 4/23/14.
+ *  Populates a ListView adapter with stats from an FRC event.
+ *
+ *  @author Phil Lopreiato
+ *  @author Bryce Matsuda
+ *  @author Nathan Walters
+ *
+ *  @version 5/21/2014
  */
 public class PopulateEventStats extends AsyncTask<String, Void, APIResponse.CODE> {
 
@@ -45,6 +51,7 @@ public class PopulateEventStats extends AsyncTask<String, Void, APIResponse.CODE
         DecimalFormat displayFormat = new DecimalFormat("#.##");
 
         try {
+            // Download data from TBA with the given event key and sort it by stat type.
             APIResponse<JsonObject> response = DataManager.getEventStats(activity, eventKey);
             JsonObject stats = response.getData();
             ArrayList<Map.Entry<String, JsonElement>>

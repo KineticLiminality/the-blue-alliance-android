@@ -28,7 +28,12 @@ import java.util.Collections;
 import java.util.Map;
 
 /**
- * File created by phil on 4/22/14.
+ *
+ *  Populates a LinearLayout with event info from an FRC event
+ *
+ *  @author Phil Lopreiato
+ *  @author Bryce Matsuda
+ *  @author Nathan Walters
  */
 public class PopulateEventInfo extends AsyncTask<String, String, APIResponse.CODE> {
 
@@ -49,6 +54,8 @@ public class PopulateEventInfo extends AsyncTask<String, String, APIResponse.COD
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
+
+        // Don't show anything until after we load the data.
         showLastMatch = showNextMatch = showRanks = showStats = false;
     }
 
@@ -57,7 +64,9 @@ public class PopulateEventInfo extends AsyncTask<String, String, APIResponse.COD
         eventKey = params[0];
 
         View view = mFragment.getView();
+        // Check that we don't have a null view or activity before loading and setting the data.
         if (view != null && activity != null) {
+            // Initialize TextViews & LinearLayouts
             eventName = (TextView) view.findViewById(R.id.event_name);
             eventDate = (TextView) view.findViewById(R.id.event_date);
             eventLoc = (TextView) view.findViewById(R.id.event_location);
@@ -68,10 +77,12 @@ public class PopulateEventInfo extends AsyncTask<String, String, APIResponse.COD
 
             LayoutInflater inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             try {
+                // Download data from TBA with the event key.
                 APIResponse<Event> response = DataManager.getEvent(activity, eventKey);
                 event = response.getData();
                 //return response.getCode();
             } catch (DataManager.NoDataException e) {
+                // Return an error if we cannot load data.
                 Log.w(Constants.LOG_TAG, "unable to load event info");
                 return APIResponse.CODE.NODATA;
             }
@@ -196,6 +207,7 @@ public class PopulateEventInfo extends AsyncTask<String, String, APIResponse.COD
                 activity.showWarningMessage(activity.getString(R.string.warning_using_cached_data));
             }
 
+            // Remove the spinning progress bar once we're done loading the data.
             View view = mFragment.getView();
             if (view != null) {
                 view.findViewById(R.id.progress).setVisibility(View.GONE);

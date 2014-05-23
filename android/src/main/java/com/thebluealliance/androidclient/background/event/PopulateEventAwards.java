@@ -19,7 +19,13 @@ import com.thebluealliance.androidclient.models.Award;
 import java.util.ArrayList;
 
 /**
- * File created by phil on 4/23/14.
+ *
+ * <p>Populates an ListView adapter with the awards given at an FRC event.</p>
+ *
+ * @author Phil Lopreiato
+ * @author Nathan Walters
+ *
+ * @version 5/19/2014
  */
 public class PopulateEventAwards extends AsyncTask<String, Void, APIResponse.CODE> {
 
@@ -42,6 +48,7 @@ public class PopulateEventAwards extends AsyncTask<String, Void, APIResponse.COD
 
         APIResponse<ArrayList<Award>> response;
         try {
+            // Download the event awards and store them in an array list of awards.
             response = DataManager.getEventAwards(activity, eventKey);
             ArrayList<Award> awardList = response.getData();
             for (Award a : awardList) {
@@ -50,6 +57,7 @@ public class PopulateEventAwards extends AsyncTask<String, Void, APIResponse.COD
             }
             return response.getCode();
         } catch (DataManager.NoDataException e) {
+            // Return an error if data cannot be loaded.
             Log.w(Constants.LOG_TAG, "unable to load event awards");
             return APIResponse.CODE.NODATA;
         }
@@ -58,11 +66,12 @@ public class PopulateEventAwards extends AsyncTask<String, Void, APIResponse.COD
     @Override
     protected void onPostExecute(APIResponse.CODE code) {
         View view = mFragment.getView();
-        if (view != null) {
+        if (view != null) { // Make sure the view isn't null before we set up the adapter
             adapter = new ListViewAdapter(activity, awards);
             ListView rankings = (ListView) view.findViewById(R.id.list);
             rankings.setAdapter(adapter);
 
+            // Display a warning if device is offline.
             if (code == APIResponse.CODE.OFFLINECACHE /* && event is current */) {
                 //TODO only show warning for currently competing event (there's likely missing data)
                 activity.showWarningMessage(activity.getString(R.string.warning_using_cached_data));
