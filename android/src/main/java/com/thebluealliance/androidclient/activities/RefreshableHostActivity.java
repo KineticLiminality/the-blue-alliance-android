@@ -9,7 +9,13 @@ import com.thebluealliance.androidclient.interfaces.RefreshListener;
 import java.util.ArrayList;
 
 /**
- * Created by Nathan on 4/29/2014.
+ * RefreshableHostActivity
+ *
+ * <p>An activity that refreshes. Needs more descriptive love.</p>
+ *
+ * @author Nathan Walters
+ * @version 5/19/2014
+ *
  */
 public abstract class RefreshableHostActivity extends NavigationDrawerActivity {
 
@@ -27,6 +33,14 @@ public abstract class RefreshableHostActivity extends NavigationDrawerActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    /**
+     * Handle action bar item clicks here. The action bar will
+     * automatically handle clicks on the Home/Up button, so long
+     * as you specify a parent activity in AndroidManifest.xml.
+     *
+     * @param item the item clicked
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -59,7 +73,7 @@ public abstract class RefreshableHostActivity extends NavigationDrawerActivity {
         }
     }
 
-    /*
+    /**
     This can be overridden by child classes to check whether or not a refresh should take place.
     For example, this might return false if there is no network connection and a network connection
     is required to refresh data. The default return value is true.
@@ -70,12 +84,12 @@ public abstract class RefreshableHostActivity extends NavigationDrawerActivity {
         return true;
     }
 
-    /*
+    /**
     Registered listeners call this to notify the activity that they have finished refreshing.
     Once all registered listeners have indicated that they have finished refreshing, the list
     of listeners that have reported completion is cleared and onRefreshComplete() is called.
 
-    @param listener the listener that has finished refreshing
+    @param completedListener the listener that has finished refreshing
      */
     public synchronized void notifyRefreshComplete(RefreshListener completedListener) {
         if (completedListener == null || !mRefreshListeners.contains(completedListener)) {
@@ -100,7 +114,7 @@ public abstract class RefreshableHostActivity extends NavigationDrawerActivity {
         }
     }
 
-    /*
+    /**
     Called when all registered listeners have reported that they are done refreshing.
     This can be overridden to do custom things when refreshing is completed. However, the child class should ALWAYS
     call super.onRefreshComplete() to ensure proper behavior.
@@ -114,7 +128,7 @@ public abstract class RefreshableHostActivity extends NavigationDrawerActivity {
         mRefreshInProgress = false;
     }
 
-    /*
+    /**
     Notifies all registered listeners that they should start their refresh.
      */
     protected void startRefresh() {
@@ -132,7 +146,7 @@ public abstract class RefreshableHostActivity extends NavigationDrawerActivity {
         }
     }
 
-    /*
+    /**
     Notifies all registered listeners that they should cancel their refresh
      */
     protected void cancelRefresh() {
@@ -146,7 +160,7 @@ public abstract class RefreshableHostActivity extends NavigationDrawerActivity {
         }
     }
 
-    /*
+    /**
     Notifies all refresh listeners that they should stop, and immediately notifies them that they should start again.
      */
     protected void restartRefresh() {
@@ -159,7 +173,15 @@ public abstract class RefreshableHostActivity extends NavigationDrawerActivity {
         mRefreshInProgress = true;
     }
 
+    /**
+     * Displays a warning message to the user.
+     *
+     * @param message the string containing the message
+     */
     public abstract void showWarningMessage(String message);
 
+    /**
+     * Hides the warning message.
+     */
     public abstract void hideWarningMessage();
 }

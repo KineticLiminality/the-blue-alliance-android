@@ -15,7 +15,12 @@ import com.thebluealliance.androidclient.adapters.ViewTeamFragmentPagerAdapter;
 import com.thebluealliance.androidclient.datafeed.ConnectionDetector;
 
 /**
- * File created by nathan on 4/21/14.
+ * <p>Activity that displays information about an FRC team</p>
+ *
+ * @author Phil Lopreiato
+ * @author Nathan Walters
+ *
+ * @version 5/19/2014
  */
 public class ViewTeamActivity extends RefreshableHostActivity {
 
@@ -25,6 +30,12 @@ public class ViewTeamActivity extends RefreshableHostActivity {
     // Should come in the format frc####
     private String mTeamKey;
 
+    /**
+     * Creates a new team activity.
+     * @param context activity currently running
+     * @param teamKey key representing an FRC team
+     * @return newly created activity
+     */
     public static Intent newInstance(Context context, String teamKey) {
         System.out.println("making intent for " + teamKey);
         Intent intent = new Intent(context, ViewTeamActivity.class);
@@ -37,11 +48,12 @@ public class ViewTeamActivity extends RefreshableHostActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_team);
 
-        mTeamKey = getIntent().getStringExtra(TEAM_KEY);
-        if (mTeamKey == null) {
+        mTeamKey = getIntent().getStringExtra(TEAM_KEY); // get team key from previous activity
+        if (mTeamKey == null) { // null check
             throw new IllegalArgumentException("ViewTeamActivity must be created with a team key!");
         }
 
+        // Initialize warning message, tabs, and action bar
         warningMessage = (TextView) findViewById(R.id.warning_container);
         hideWarningMessage();
 
@@ -54,6 +66,7 @@ public class ViewTeamActivity extends RefreshableHostActivity {
         // Setup the action bar
         setupActionBar();
 
+        // Load warning message if device is not connected to internet
         if (!ConnectionDetector.isConnectedToInternet(this)) {
             showWarningMessage(getString(R.string.warning_unable_to_load));
         }

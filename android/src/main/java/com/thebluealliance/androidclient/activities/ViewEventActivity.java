@@ -12,26 +12,34 @@ import com.thebluealliance.androidclient.adapters.ViewEventFragmentPagerAdapter;
 import com.thebluealliance.androidclient.datafeed.ConnectionDetector;
 
 /**
- * File created by phil on 4/20/14.
+ * <p>Activity that displays information about a FRC event</p>
+ *
+ * @author Phil Lopreiato
+ * @author Nathan Walters
+ *
+ * @version 5/19/2014
  */
 public class ViewEventActivity extends RefreshableHostActivity {
 
-    private String mEventKey;
-    private TextView warningMessage;
-    private ViewPager pager;
+    private String mEventKey; // key that represents the event loaded in this activity
+    private TextView warningMessage; // text view that represents the warning message to be displayed
+    private ViewPager pager; // pager that represents the sliding tabs
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_event);
 
+        // Get the event key from the previous activity
         if (getIntent().getExtras() != null) {
             mEventKey = getIntent().getExtras().getString("eventKey", "");
         }
 
+        // Load and then initially hide the warning message
         warningMessage = (TextView) findViewById(R.id.warning_container);
         hideWarningMessage();
 
+        // Load pager sliding tabs and nav bar.
         pager = (ViewPager) findViewById(R.id.view_pager);
         pager.setAdapter(new ViewEventFragmentPagerAdapter(getSupportFragmentManager(), mEventKey));
 
@@ -40,6 +48,7 @@ public class ViewEventActivity extends RefreshableHostActivity {
 
         setupActionBar();
 
+        // Display warning message if device is not connected to the internet
         if (!ConnectionDetector.isConnectedToInternet(this)) {
             showWarningMessage(getString(R.string.warning_unable_to_load));
         }
@@ -51,6 +60,9 @@ public class ViewEventActivity extends RefreshableHostActivity {
         encourageLearning(false);
     }
 
+    /**
+     * Loads action bar settings and title.
+     */
     private void setupActionBar() {
         getActionBar().setDisplayHomeAsUpEnabled(true);
         // The title is empty now; the EventInfoFragment will set the appropriate title
@@ -60,9 +72,6 @@ public class ViewEventActivity extends RefreshableHostActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == android.R.id.home) {
             finish();

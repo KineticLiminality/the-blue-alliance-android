@@ -14,11 +14,12 @@ import com.thebluealliance.androidclient.datatypes.NavDrawerItem;
 import com.thebluealliance.androidclient.fragments.NavigationDrawerFragment;
 
 /**
- * Activity that provides a navigation drawer.
+ *  Activity that provides a navigation drawer.
  * <p/>
  * This allows for the easy reuse of a single navigation drawer throughout the app.
  * <p/>
- * Created by Nathan on 5/15/2014.
+ * @author Nathan Walters
+ * @version  5/15/2014
  */
 public abstract class NavigationDrawerActivity extends FragmentActivity implements NavigationDrawerFragment.NavigationDrawerListener {
 

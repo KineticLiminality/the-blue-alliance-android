@@ -11,6 +11,21 @@ import android.view.MenuItem;
 import com.thebluealliance.androidclient.BuildConfig;
 import com.thebluealliance.androidclient.R;
 
+/**
+ *
+ * <p>Displays the settings for the TBA Android app.</p>
+ *
+ * TODO (eventually): account support, cache size
+ *
+ * @author Adam Corpstein
+ * @author Phil Lopreiato
+ * @author Bryce Matsuda
+ * @author tanis7x
+ * @author Nathan Walters
+ *
+ * @version 5/15/2014
+ *
+ */
 public class SettingsActivity extends PreferenceActivity {
 
     @Override
@@ -18,7 +33,7 @@ public class SettingsActivity extends PreferenceActivity {
         super.onCreate(savedInstanceState);
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
-        getFragmentManager().beginTransaction()
+        getFragmentManager().beginTransaction() // Load the settings fragment
                 .replace(android.R.id.content, new SettingsFragment())
                 .commit();
     }
@@ -27,8 +42,11 @@ public class SettingsActivity extends PreferenceActivity {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
+
+            // Load link/summary strings from res/preferences.xml
             addPreferencesFromResource(R.xml.preferences);
 
+            // Set summary/intents using loaded strings
             Preference appVersion = findPreference("app_version");
             appVersion.setSummary(BuildConfig.VERSION_NAME);
 

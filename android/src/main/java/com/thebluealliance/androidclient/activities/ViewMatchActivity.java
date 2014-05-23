@@ -9,7 +9,9 @@ import com.thebluealliance.androidclient.R;
 import com.thebluealliance.androidclient.background.match.PopulateMatchInfo;
 
 /**
- * Created by Nathan on 5/14/2014.
+ * <p>Activity that displays information about an FRC match</p>
+ *
+ * @author Nathan Walters
  */
 public class ViewMatchActivity extends RefreshableHostActivity {
 
@@ -17,8 +19,14 @@ public class ViewMatchActivity extends RefreshableHostActivity {
 
     private static final String VIDEO_FRAGMENT_TAG = "videoFragment";
 
-    private String mMatchKey;
+    private String mMatchKey; // key representing a unique FRC match
 
+    /**
+     * Creates a new match activity.
+     * @param context activity currently running
+     * @param matchKey key representing an FRC match
+     * @return newly created match activity
+     */
     public static Intent newInstance(Context context, String matchKey) {
         Intent intent = new Intent(context, ViewMatchActivity.class);
         intent.putExtra(MATCH_KEY, matchKey);
@@ -31,12 +39,12 @@ public class ViewMatchActivity extends RefreshableHostActivity {
         setContentView(R.layout.activity_view_match);
         setupActionBar();
 
-        mMatchKey = getIntent().getStringExtra(MATCH_KEY);
-        if (mMatchKey == null) {
+        mMatchKey = getIntent().getStringExtra(MATCH_KEY); // get match key from previous activity
+        if (mMatchKey == null) { // null check
             throw new IllegalArgumentException("ViewMatchActivity must be created with a match key!");
         }
 
-        new PopulateMatchInfo(this).execute(mMatchKey);
+        new PopulateMatchInfo(this).execute(mMatchKey); // get match info using the match key
     }
 
     @Override
@@ -61,9 +69,6 @@ public class ViewMatchActivity extends RefreshableHostActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == android.R.id.home) {
             finish();

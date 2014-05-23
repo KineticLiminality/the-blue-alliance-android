@@ -12,16 +12,22 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
 /**
- * Created by Nathan on 5/11/2014.
+ *
+ *  <p>Displays the open source licenses for the TBA Android app.</p>
+ *
+ *  @author Nathan Walters
+ *  @version 5/11/2014
  */
 public class OpenSourceLicensesActivity extends Activity {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_open_source_licenses);
-        TextView text = (TextView) findViewById(R.id.text);
+        TextView text = (TextView) findViewById(R.id.text); // TextView that will display the licenses
 
         try{
+            // Read and print the license text from raw/licenses.txt
             BufferedReader br = new BufferedReader(new InputStreamReader(getResources().openRawResource(R.raw.licenses)));
             try {
                 StringBuilder sb = new StringBuilder();
@@ -38,6 +44,7 @@ public class OpenSourceLicensesActivity extends Activity {
                 br.close();
             }
         } catch (Exception e) {
+            // Print an error if something goes terribly wrong.
             e.printStackTrace();
             text.setText("Error reading licenses file.");
         }

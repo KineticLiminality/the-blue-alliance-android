@@ -19,7 +19,15 @@ import com.thebluealliance.androidclient.fragments.InsightsFragment;
 import com.thebluealliance.androidclient.interfaces.ActionBarSpinnerListener;
 
 /**
- * File created by phil on 4/20/14.
+ * First activity seen upon starting the TBA Android app.
+ *
+ * @author Adam Corpstein
+ * @author Phil Lopreiato
+ * @author Bryce Matsuda
+ * @author tanis7x
+ * @author Nathan Walters
+ *
+ * @version 5/21/2014
  */
 public class StartActivity extends RefreshableHostActivity implements ActionBar.OnNavigationListener {
 
@@ -57,6 +65,7 @@ public class StartActivity extends RefreshableHostActivity implements ActionBar.
 
         setContentView(R.layout.activity_start);
 
+        // Load the warning message, and then hide it for now.
         warningMessage = (TextView) findViewById(R.id.warning_container);
         hideWarningMessage();
 
@@ -82,6 +91,7 @@ public class StartActivity extends RefreshableHostActivity implements ActionBar.
 
         switchToModeForId(initNavId);
 
+        // Display warning message if the device is not connected to the internet
         if (!ConnectionDetector.isConnectedToInternet(this)) {
             showWarningMessage(getString(R.string.warning_unable_to_load));
         }
@@ -110,6 +120,11 @@ public class StartActivity extends RefreshableHostActivity implements ActionBar.
         outState.putInt(STATE_SELECTED_NAV_ID, mCurrentSelectedNavigationItemId);
     }
 
+    /**
+     * Switches to another fragment/activity, depending on the item clicked in the nav drawer
+     *
+     * @param id the nav drawer item selected
+     */
     private void switchToModeForId(int id) {
         Fragment fragment;
         switch (id) {
